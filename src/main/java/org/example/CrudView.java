@@ -1,8 +1,5 @@
 package org.example;
 
-
-
-
 public class CrudView {
     public void showIdSelectionMenu() {System.out.println("Введите ID нужного автора: ");}
 
