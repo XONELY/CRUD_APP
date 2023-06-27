@@ -1,10 +1,11 @@
 package org.example;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
 
-public class PostPOJO {
+public class PostPOJO implements Serializable {
     private final int id = idCounter+1;
     private static int idCounter = 0;
     {idCounter +=1;}

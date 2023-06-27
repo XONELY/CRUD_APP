@@ -1,6 +1,8 @@
 package org.example;
 
-public class LabelPOJO {
+import java.io.Serializable;
+
+public class LabelPOJO implements Serializable {
     private final int id = idCounter+1;
     private static int idCounter = 0;
     {idCounter +=1;}
