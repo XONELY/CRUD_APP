@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "content": [
+      "September 28th, daylight. The monsters have overtaken the city. "
+    ],
+    "created": "2023-06-27",
+    "updated": "Неизвестно",
+    "labels": [
+      {
+        "id": 1,
+        "name": "Raccon"
+      }
+    ],
+    "status": "DELETED"
+  }
+]
