@@ -1,4 +1,4 @@
-package org.example;
+package org.xonely;
 
 public enum PostStatus {
     ACTIVE,

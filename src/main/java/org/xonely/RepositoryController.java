@@ -1,4 +1,4 @@
-package org.example;
+package org.xonely;
 
 import com.google.gson.*;
 
@@ -6,10 +6,6 @@ import java.io.*;
 import java.util.*;
 
 public class RepositoryController {
-    public static final String WRITERS_FILE = "writers.json";
-    public static final String POSTS_FILE = "posts.json";
-    public static final String LABELS_FILE = "labels.json";
-
     public static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static void saveToJson(String path) {
@@ -30,6 +26,7 @@ public class RepositoryController {
         }
 
     }
+
 
     public static List<WriterPOJO> loadWriterJson() {
 

@@ -1,4 +1,7 @@
-package org.example;
+package org.xonely.view;
+
+import org.xonely.CRUDController;
+import org.xonely.WriterController;
 
 public class CrudView {
     public void showIdSelectionMenu() {System.out.println("Введите ID нужного автора: ");}
@@ -22,7 +25,7 @@ public class CrudView {
 
         WriterController.createWriter(firstName, lastName);
 
-    }
+    } //writer controller + separate
 
     public void getMenuView() { //2
         System.out.println("Меню Просмотра:");

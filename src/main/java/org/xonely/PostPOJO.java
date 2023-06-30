@@ -1,4 +1,4 @@
-package org.example;
+package org.xonely;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
