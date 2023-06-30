@@ -1,49 +1,50 @@
-package org.xonely;
+package org.xonely.model;
+
+import org.xonely.controller.LabelController;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
 
-public class PostPOJO implements Serializable {
-    private final int id = idCounter+1;
-    private static int idCounter = 0;
-    {idCounter +=1;}
-
+public class Post implements Serializable {
+    private int id;
     private List<String> content;
     private final String created;
     private String updated = "Неизвестно";
-    private final List<LabelPOJO> labels = new ArrayList<>();
-    private PostStatus status;
+    private final List<Label> labels;
+    private Status status;
 
-    public PostPOJO(List<String> content, String created, String label, PostStatus status) {
+    public Post(int id, List<String> content, String created) {
+        this.id = id;
         this.content = content;
         this.created = created;
-        this.labels.add(new LabelPOJO(label));
-        this.status = status;
+        this.labels = new ArrayList<>();
+        this.status = Status.UNDER_REVIEW;
     }
 
-    public List<LabelPOJO> getLabels() {
+    public List<Label> getLabels() {
         return labels;
     }
 
-    public void AddLabel(LabelPOJO label) {
+    public void AddLabel(Label label) {
         labels.add(label);
     }
 
-    public void setContent(List<String> nContent) {
+    public void updateContent(List<String> nContent) {
         content = nContent;
     }
 
-    public void setUpdated(String updated) {
+    public void updateDate(String updated) {
         this.updated = updated;
     }
 
-    public PostStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(PostStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
