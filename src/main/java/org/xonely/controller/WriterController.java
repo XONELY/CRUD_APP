@@ -9,21 +9,38 @@ import java.util.*;
 
 public class WriterController {
     GsonWriterRepoImpl gwri = new GsonWriterRepoImpl();
-    private final Scanner scanner = new Scanner(System.in);
-    private final List<Writer> importedWriters = gwri.getAll();
-    PostController postController = new PostController();
-    Writer currentWriter;
-    PostView postView = new PostView();
-    int lastId = importedWriters.size();
+    private Scanner scanner = new Scanner(System.in);
+    private PostController postController = new PostController();
+    private PostView postView = new PostView();
+    private Writer currentWriter;
+
+    private List<Writer> importedWriters;
+    private int lastId;
+
+
+
+
+
 
     public void createWriter() {
+
+        importedWriters = gwri.getAll();
+        lastId = importedWriters.size();
+
+
         System.out.print("Введите Имя: ");
         String firstName = scanner.next();
         System.out.print("Введите Фамилию: ");
         String lastName = scanner.next();
         currentWriter = new Writer(lastId, firstName, lastName);
         importedWriters.add(currentWriter);
+
+        System.out.println("SIZE " + importedWriters.size());
+        System.out.println("WRITERS " + importedWriters);
+        System.out.println("///////////////////////////////");
+
         gwri.save(currentWriter);
+
 
     }
 
@@ -48,7 +65,7 @@ public class WriterController {
     public void showAllWriters() {
         if (!importedWriters.isEmpty()) {
             System.out.println("Список всех авторов: ");
-            importedWriters.forEach(w -> System.out.println(w.getFullName()));
+            importedWriters.forEach(w -> System.out.println(w.toString()));
         } else System.err.println("Список пуст!");
     }
 

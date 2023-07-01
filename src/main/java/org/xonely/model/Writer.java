@@ -6,12 +6,12 @@ import java.util.*;
 
 public class Writer implements Serializable {
 
-    private int id = 0;
+    private int id;
 
     private Status status;
     private String firstName;
     private String lastName;
-    private final List<Post> posts;
+    private List<Post> posts;
 
     public Writer(int id, String firstName, String lastName) {
         this.id = id;
@@ -30,14 +30,10 @@ public class Writer implements Serializable {
         this.lastName = lastName;
     }
 
-    public List<Post> getPosts() {
-        return posts;
-    }
+    public List<Post> getPosts() {return posts;}
 
 
-    public void addPost(Post post) {
-        posts.add(post);
-    }
+    public void addPost(Post post) {posts.add(post);}
 
     public Status getStatus() {
         return status;
@@ -54,8 +50,20 @@ public class Writer implements Serializable {
     @Override
     public String toString() {
         return
-                "id= " + id + "| " + lastName +
-                        " " + firstName +
-                        ", Посты: " + posts;
+                "id= " + id + " | " + lastName +
+                        " " + firstName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Writer writer = (Writer) o;
+        return id == writer.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -15,8 +15,8 @@ import static org.xonely.model.Status.DELETED;
 
 public class GsonPostRepoImpl implements PostRepo {
     private List<Post> posts;
-    private final String path = "posts.json";
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private  String path = "posts.json";
+    private  Gson gson = new GsonBuilder().setPrettyPrinting().create();
     public GsonPostRepoImpl() {
         File file = new File(path);
 
@@ -25,7 +25,7 @@ public class GsonPostRepoImpl implements PostRepo {
     public List<Post> getAll() {
 
         try (InputStream is = new FileInputStream(path); Reader reader = new InputStreamReader(is)) {
-            posts = Stream.of(gson.fromJson(reader, Post[].class)).toList();
+            posts = Stream.of(gson.fromJson(reader, Post[].class)).distinct().toList();
             if(posts ==null){
                 return new ArrayList<>();
             }else{

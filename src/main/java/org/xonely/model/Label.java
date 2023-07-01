@@ -6,10 +6,9 @@ import java.io.Serializable;
 
 public class Label implements Serializable {
     private int id;
-    private final String name;
+    private String name;
     private Status status;
 
-    LabelController labelController = new LabelController();
 
     public Label(int id,String name) {
         this.name = name;

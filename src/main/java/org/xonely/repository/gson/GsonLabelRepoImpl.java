@@ -14,8 +14,8 @@ import static org.xonely.model.Status.DELETED;
 
 public class GsonLabelRepoImpl implements LabelRepo {
     private List<Label> labels;
-    private final String path = "labels.json";
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private  String path = "labels.json";
+    private  Gson gson = new GsonBuilder().setPrettyPrinting().create();
     public GsonLabelRepoImpl() {
         File file = new File(path);
     }
@@ -23,7 +23,7 @@ public class GsonLabelRepoImpl implements LabelRepo {
     public List<Label> getAll() {
 
         try (InputStream is = new FileInputStream(path); Reader reader = new InputStreamReader(is)) {
-            labels = Stream.of(gson.fromJson(reader, Label[].class)).toList();
+            labels = Stream.of(gson.fromJson(reader, Label[].class)).distinct().toList();
             if (labels == null) {
                 return new ArrayList<>();
             } else {

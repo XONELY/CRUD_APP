@@ -11,9 +11,9 @@ import java.util.List;
 public class Post implements Serializable {
     private int id;
     private List<String> content;
-    private final String created;
+    private String created;
     private String updated = "Неизвестно";
-    private final List<Label> labels;
+    private List<Label> labels;
     private Status status;
 
     public Post(int id, List<String> content, String created) {
