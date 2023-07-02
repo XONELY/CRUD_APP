@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "content": [
+      "September 28th. Daylight."
+    ],
+    "created": "2023-07-02",
+    "updated": "Неизвестно",
+    "labels": [
+      {
+        "id": 1,
+        "name": "Raccoon_Incident",
+        "status": "ACTIVE"
+      }
+    ],
+    "status": "ACTIVE"
+  }
+]

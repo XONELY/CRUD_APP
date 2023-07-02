@@ -1,59 +1,38 @@
 package org.xonely.repository.gson;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import org.xonely.model.Post;
 import org.xonely.repository.PostRepo;
 
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.stream.*;
 
 import static org.xonely.model.Status.DELETED;
 
 public class GsonPostRepoImpl implements PostRepo {
-    private List<Post> posts;
-    private  String path = "posts.json";
-    private  Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    public GsonPostRepoImpl() {
-        File file = new File(path);
+    List<Post> postList;
+    private final String path = "posts.json";
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    }
     @Override
     public List<Post> getAll() {
-
         try (InputStream is = new FileInputStream(path); Reader reader = new InputStreamReader(is)) {
-            posts = Stream.of(gson.fromJson(reader, Post[].class)).distinct().toList();
-            if(posts ==null){
-                return new ArrayList<>();
-            }else{
-            return posts;}
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }catch(NullPointerException e){
+            return Stream.of(gson.fromJson(reader, org.xonely.model.Post[].class)).distinct().collect(Collectors.toList());
+        } catch (NullPointerException | IOException e) {
             return new ArrayList<>();
         }
     }
 
     @Override
-    public Post getById(Integer id) {
-        return getAll().get(id);
-    }
-
-    @Override
     public Post save(Post post) {
-        try (OutputStream os = new FileOutputStream(path, false); Writer wr = new OutputStreamWriter(os)) {
-            posts = getAll();
-            if (posts.stream().noneMatch(streamW -> streamW.equals(post))) {
-                posts.add(post);
-                String json = gson.toJson(posts);
-                wr.write(json);
-            } else {
-                System.err.println("Такой пост уже существует");
-            }
+        postList = getAll();
+
+        try (OutputStream os = new FileOutputStream(path, false); java.io.Writer wr = new OutputStreamWriter(os)) {
+            postList.add(post);
+            String json = gson.toJson(postList);
+            wr.write(json);
             return post;
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,13 +40,15 @@ public class GsonPostRepoImpl implements PostRepo {
         }
     }
 
+
     @Override
     public Post update(Post post) {
-        try (OutputStream os = new FileOutputStream(path, false); Writer wr = new OutputStreamWriter(os)) {
-            posts = getAll();
-            int index = posts.indexOf(post);
-            posts.set(index, post);
-            String json = gson.toJson(posts);
+        postList = getAll();
+        try (OutputStream os = new FileOutputStream(path, false); java.io.Writer wr = new OutputStreamWriter(os)) {
+            postList.addAll(getAll());
+            int index = postList.indexOf(post);
+            postList.set(index, post);
+            String json = gson.toJson(postList);
             wr.write(json);
             return post;
         } catch (Exception e) {
@@ -77,8 +58,15 @@ public class GsonPostRepoImpl implements PostRepo {
     }
 
     @Override
-    public void deleteById(Integer id) {
-        posts.get(id).setStatus(DELETED);
+    public Post getById(Integer id) {
+        return getAll().get(id);
     }
 
+    @Override
+    public void deleteById(Integer id) {
+        Post post = getById(id);
+        post.setStatus(DELETED);
+        update(post);
+
+    }
 }

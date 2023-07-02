@@ -1,12 +1,12 @@
 package org.xonely;
 
 
-import org.xonely.controller.CRUDController;
+import org.xonely.view.MainView;
 
 
 public class Main {
     public static void main(String[] args) {
-        CRUDController app = new CRUDController();
+        MainView app = new MainView();
         app.StartApp();
 
     }

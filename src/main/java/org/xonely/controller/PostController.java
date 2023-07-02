@@ -1,84 +1,48 @@
 package org.xonely.controller;
 
-
-import org.xonely.model.Status;
-import org.xonely.model.Post;
-import org.xonely.model.Writer;
+import org.xonely.model.*;
 import org.xonely.repository.gson.GsonPostRepoImpl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class PostController {
-    private final String dateNow = java.time.LocalDate.now().toString();
-    GsonPostRepoImpl gpri = new GsonPostRepoImpl();
-    private final Scanner scanner = new Scanner(System.in);
-    List<Post> importedPosts = gpri.getAll();
-    int lastId = importedPosts.size() - 1;
-    LabelController labelController = new LabelController();
+    GsonPostRepoImpl postRepo = new GsonPostRepoImpl();
 
+    public Post add(Post post) {
+        postRepo.save(post);
+        return post;
+    }
 
-    public void addPost(Writer writer) {
+    public List<Post> getAll() {
+        return postRepo.getAll();
+    }
 
-        System.out.println("Введите текст поста. Для завершения редактирования введите 'exit':");
-        List<String> content = new ArrayList<>();
+    public Post get(Integer id) {
+        return getAll().get(id);
+    }
 
-        while (!(scanner.nextLine()).equals("exit")) {
-            content.add(scanner.nextLine());
-            writer.addPost(new Post(lastId, content, dateNow));
+    public void updatePost(Post post, List<String> content, String updateDate) {//////
+        post.updateContent(content);
+        post.updateDate(updateDate);
+        postRepo.update(post);
+    }
 
+    public void updatePost(Post post) {//////
+        postRepo.update(post);
+    }
+
+    public void statusUpdate(int choice, Post post) {
+        if (choice == 1) {
+            post.setStatus(Status.ACTIVE);
+        } else if (choice == 2) {
+            post.setStatus(Status.DELETED);
+        } else {
+            post.setStatus(Status.UNDER_REVIEW);
         }
+        postRepo.update(post);
     }
 
-    public Post getPost(int postId) {
-        return importedPosts.get(postId);
+    public void deletebyId(int id) {
+        postRepo.deleteById(id);
     }
-
-    public void showAllPosts() {
-        importedPosts.forEach(System.out::println);
-    }
-
-    public void EditPost(int choice, Writer writer) {
-        int postId;
-        importedPosts.forEach(System.out::println);
-        System.out.println();
-        System.out.println("Введите id поста");
-        postId = scanner.nextInt();
-        Post currentPost = importedPosts.get(postId);
-        switch (choice) {
-            case 1:
-                List<String> content = new ArrayList<>();
-                System.out.println("Введите текст поста. Для завершения редактирования введите 'exit':");
-                while (!(scanner.nextLine()).equals("exit")) {
-                    content.add(scanner.nextLine());
-                    currentPost.updateContent(content);
-                    currentPost.updateDate(dateNow);
-                }
-                break;
-            case 2:
-                labelController.addLabel(currentPost);
-                break;
-            case 3:
-                System.out.println("Выберите статус: ");
-                System.err.println("1)ACTIVE ");
-                System.err.println("2)DELETED ");
-                System.err.println("3)UNDER_REVIEW ");
-                choice = scanner.nextInt();
-
-                if (choice == 1) {
-                    currentPost.setStatus(Status.ACTIVE);
-                } else if (choice == 2) {
-                    currentPost.setStatus(Status.DELETED);
-                } else {
-                    currentPost.setStatus(Status.UNDER_REVIEW);
-                }
-                System.out.println("Статус изменен на: " + currentPost.getStatus());
-                break;
-            default:
-                System.err.print("Неверный выбор. Попробуйте еще раз: ");
-                break;
-        }
-    }
-
 }

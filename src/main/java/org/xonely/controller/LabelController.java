@@ -1,46 +1,44 @@
 package org.xonely.controller;
 
-import org.xonely.model.Label;
-import org.xonely.model.Post;
+import org.xonely.model.*;
 import org.xonely.repository.gson.GsonLabelRepoImpl;
 
-import java.util.*;
+import java.util.List;
 
 public class LabelController {
-    GsonLabelRepoImpl glri = new GsonLabelRepoImpl();
-    List<Label> importedLabels = glri.getAll();
-    private final Scanner scanner = new Scanner(System.in);
+    GsonLabelRepoImpl labelRepo = new GsonLabelRepoImpl();
 
+    public Label add(Label label) {
+        labelRepo.save(label);
+        return label;
+    }
 
-    private int lastId = importedLabels.size();
+    public List<Label> getAll() {
+        return labelRepo.getAll();
+    }
 
-    public void addLabel(Post post) {
-        System.out.print("Задайте имя тэга: ");
-        String labelName = scanner.next();
-        importedLabels = glri.getAll();
-        Label label = new Label(lastId,labelName);
-        if (importedLabels.stream().noneMatch(streamW -> streamW.equals(label))) {
-            post.AddLabel(label);
-            glri.save(label);
+    public Label get(Integer id) {
+        return getAll().get(id);
+    }
+
+    public Label statusUpdate(int choice, Label label) {
+        if (choice == 1) {
+            label.setStatus(Status.ACTIVE);
+
+        } else if (choice == 2) {
+            label.setStatus(Status.DELETED);
+
+        } else {
+            label.setStatus(Status.UNDER_REVIEW);
+
         }
-    }
-    public List<Label> getLabels() {
-        return glri.getAll();
-    }
-
-
-    public void showAllLabels(){
-        importedLabels.forEach(System.out::println);
-    }
-    public void deleteLabel() {
-        glri.getAll().forEach(System.out::println);
-        System.out.println("Введите id тэга для удаления: ");
-        int id = scanner.nextInt();
-        glri.deleteById(id);
+        labelRepo.update(label);
+        return label;
     }
 
-    public void updateLabel(Label label) {
-        glri.update(label);
+    public void deletebyId(int id) {
+        labelRepo.deleteById(id);
+
     }
 
 }

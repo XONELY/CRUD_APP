@@ -3,15 +3,13 @@ package org.xonely.model;
 import java.io.Serializable;
 import java.util.*;
 
-
 public class Writer implements Serializable {
 
-    private int id;
-
+    private final int id;
     private Status status;
     private String firstName;
     private String lastName;
-    private List<Post> posts;
+    private final List<Post> posts;
 
     public Writer(int id, String firstName, String lastName) {
         this.id = id;
@@ -30,10 +28,13 @@ public class Writer implements Serializable {
         this.lastName = lastName;
     }
 
-    public List<Post> getPosts() {return posts;}
+    public List<Post> getPosts() {
+        return posts.stream().distinct().toList();
+    }
 
-
-    public void addPost(Post post) {posts.add(post);}
+    public void addPost(Post post) {
+        posts.add(post);
+    }
 
     public Status getStatus() {
         return status;
@@ -43,15 +44,12 @@ public class Writer implements Serializable {
         this.status = status;
     }
 
-    public String getFullName() {
-        return lastName + " " + firstName;
-    }
 
     @Override
     public String toString() {
         return
-                "id= " + id + " | " + lastName +
-                        " " + firstName;
+                "id: " + id + " | " + lastName +
+                        " " + firstName + " " + status;
     }
 
     @Override

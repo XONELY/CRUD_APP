@@ -1,39 +1,41 @@
 package org.xonely.model;
 
-import org.xonely.controller.LabelController;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-
+import java.util.*;
 
 public class Post implements Serializable {
-    private int id;
+    private final int id;
     private List<String> content;
-    private String created;
+    private final String created;
     private String updated = "Неизвестно";
-    private List<Label> labels;
+    private final List<Label> labels;
     private Status status;
 
     public Post(int id, List<String> content, String created) {
         this.id = id;
-        this.content = content;
         this.created = created;
         this.labels = new ArrayList<>();
         this.status = Status.UNDER_REVIEW;
+
+        this.content = content;
+
     }
 
     public List<Label> getLabels() {
         return labels;
     }
 
+    public void updateLabel(Label label) {
+        int index = labels.indexOf(label);
+        labels.set(index, label);
+    }
+
     public void AddLabel(Label label) {
         labels.add(label);
     }
 
-    public void updateContent(List<String> nContent) {
-        content = nContent;
+    public void updateContent(List<String> newContent) {
+        content = newContent;
     }
 
     public void updateDate(String updated) {
@@ -50,12 +52,26 @@ public class Post implements Serializable {
 
     @Override
     public String toString() {
-        return "Статья № " + id +
+        return "ID: " + id +
                 ", Дата создания: '" + created + '\'' +
                 ", Дата изменения: '" + updated + '\'' +
-                ", Тэги: " + labels +
-                ", Статус: " + status +
+                ", Статус поста: " + status +
                 "\n Текст статьи:\n" +
-                content.toString() + "\n";
+                String.join("\n", content) + "\n" +
+                "Тэги: " + labels;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return id == post.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
