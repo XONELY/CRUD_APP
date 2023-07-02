@@ -5,6 +5,7 @@ import org.xonely.model.Label;
 import org.xonely.repository.LabelRepo;
 
 import java.io.*;
+
 import java.util.*;
 import java.util.stream.*;
 
@@ -17,7 +18,8 @@ public class GsonLabelRepoImpl implements LabelRepo {
 
     @Override
     public List<Label> getAll() {
-        try (InputStream is = new FileInputStream(path); Reader reader = new InputStreamReader(is)) {
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             return Stream.of(gson.fromJson(reader, org.xonely.model.Label[].class)).distinct().collect(Collectors.toList());
         } catch (NullPointerException | IOException e) {
             return new ArrayList<>();
@@ -29,13 +31,11 @@ public class GsonLabelRepoImpl implements LabelRepo {
     public Label save(Label label) {
         labelList = getAll();
 
-        try (OutputStream os = new FileOutputStream(path, false); java.io.Writer wr = new OutputStreamWriter(os)) {
-
+        try (BufferedWriter wr = new BufferedWriter(new FileWriter(path))) {
             labelList.add(label);
             String json = gson.toJson(labelList);
             wr.write(json);
             return label;
-
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -45,13 +45,11 @@ public class GsonLabelRepoImpl implements LabelRepo {
     @Override
     public Label update(Label label) {
         labelList = getAll();
-        try (OutputStream os = new FileOutputStream(path, false); Writer wr = new OutputStreamWriter(os)) {
-
+        try (BufferedWriter wr = new BufferedWriter(new FileWriter(path))) {
             int index = labelList.indexOf(label);
             labelList.set(index, label);
             String json = gson.toJson(labelList);
             wr.write(json);
-            System.out.println(label);
             return label;
         } catch (Exception e) {
             e.printStackTrace();

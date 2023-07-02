@@ -18,7 +18,7 @@ public class GsonWriterRepoImpl implements WriterRepo {
 
     @Override
     public List<Writer> getAll() {
-        try (InputStream is = new FileInputStream(path); Reader reader = new InputStreamReader(is)) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             return Stream.of(gson.fromJson(reader, Writer[].class)).distinct().collect(Collectors.toList());
         } catch (NullPointerException | IOException e) {
             return new ArrayList<>();
@@ -29,7 +29,7 @@ public class GsonWriterRepoImpl implements WriterRepo {
     public Writer save(Writer writer) {
         writerList = getAll();
 
-        try (OutputStream os = new FileOutputStream(path, false); java.io.Writer wr = new OutputStreamWriter(os)) {
+        try (BufferedWriter wr = new BufferedWriter(new FileWriter(path))) {
             writerList.add(writer);
             String json = gson.toJson(writerList);
             wr.write(json);
@@ -43,8 +43,7 @@ public class GsonWriterRepoImpl implements WriterRepo {
     @Override
     public Writer update(Writer writer) {
         writerList = getAll();
-        try (OutputStream os = new FileOutputStream(path, false); java.io.Writer wr = new OutputStreamWriter(os)) {
-            writerList.addAll(getAll());
+        try (BufferedWriter wr = new BufferedWriter(new FileWriter(path))) {
             int index = writerList.indexOf(writer);
             writerList.set(index, writer);
             String json = gson.toJson(writerList);

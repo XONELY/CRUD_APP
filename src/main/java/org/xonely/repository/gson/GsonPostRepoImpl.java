@@ -18,7 +18,7 @@ public class GsonPostRepoImpl implements PostRepo {
 
     @Override
     public List<Post> getAll() {
-        try (InputStream is = new FileInputStream(path); Reader reader = new InputStreamReader(is)) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             return Stream.of(gson.fromJson(reader, org.xonely.model.Post[].class)).distinct().collect(Collectors.toList());
         } catch (NullPointerException | IOException e) {
             return new ArrayList<>();
@@ -29,7 +29,7 @@ public class GsonPostRepoImpl implements PostRepo {
     public Post save(Post post) {
         postList = getAll();
 
-        try (OutputStream os = new FileOutputStream(path, false); java.io.Writer wr = new OutputStreamWriter(os)) {
+        try (BufferedWriter wr = new BufferedWriter(new FileWriter(path))) {
             postList.add(post);
             String json = gson.toJson(postList);
             wr.write(json);
@@ -44,8 +44,7 @@ public class GsonPostRepoImpl implements PostRepo {
     @Override
     public Post update(Post post) {
         postList = getAll();
-        try (OutputStream os = new FileOutputStream(path, false); java.io.Writer wr = new OutputStreamWriter(os)) {
-            postList.addAll(getAll());
+        try (BufferedWriter wr = new BufferedWriter(new FileWriter(path))) {
             int index = postList.indexOf(post);
             postList.set(index, post);
             String json = gson.toJson(postList);
